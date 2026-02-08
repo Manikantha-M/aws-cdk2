@@ -6,7 +6,23 @@ import * as s3 from 'aws-cdk-lib/aws-s3';
 export class FirstCdkStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
-    const bucket = new s3.Bucket(this, 'FirstCdkProjectBucket', {});
+    const bucket = new s3.Bucket(this, 'FirstCdkProjectBucket', {
+      removalPolicy:cdk.RemovalPolicy.DESTROY,
+      autoDeleteObjects:true,
+    });
+    const bucketTwo = new s3.Bucket(this, 'SecondCdkProjectBucket', {
+      removalPolicy:cdk.RemovalPolicy.DESTROY,
+      autoDeleteObjects:true,
+      publicReadAccess:true,
+      websiteIndexDocument:'index.html',
+      blockPublicAccess: new s3.BlockPublicAccess({
+        blockPublicAcls:false,
+        blockPublicPolicy:false,
+        ignorePublicAcls:false,
+        restrictPublicBuckets:false
+      })
+    });
+    // bucket.applyRemovalPolicy(cdk.RemovalPolicy.DESTROY);
     // Print Bucket
     new cdk.CfnOutput(this, 'BucketName', {
       value:bucket.bucketName,
